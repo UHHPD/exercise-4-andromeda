@@ -2,6 +2,7 @@
 #include <vector>
 #include <functional>
 #include <string>
+#include <cmath>
 
 #include "Data.hh"
 
@@ -66,14 +67,41 @@ int main() {
   cout << "******************************************************" << endl;
   runTests();
   cout << "******************************************************" << endl;
-  // create an object which holds data of experiment A
-  Data datA("exp_A");
 
+  // create an object which holds data of experiment A
+  std::vector<string> expname({"A", "B", "C", "D"});
+  std::vector<Data> data;
+
+  for (string expname : expname) {
+    data.push_back(Data("exp_" + expname));
+  }
   // here is the data from experiment A
-  cout << "bin 27: from " << datA.binLow(27) << " to " << datA.binHigh(27)
+  cout << "bin 27: from " << data[0].binLow(27) << " to " << data[0].binHigh(27)
        << endl;
-  cout << "measurement of experiment A in bin 27: " << datA.measurement(27)
+  cout << "measurement of experiment A in bin 27: " << data[0].measurement(27)
        << endl;
+
+  for (int i = 0; i < data.size(); ++i) {
+    cout << "measurement of experiment " << expname[i] << " in bin 27: " << data[i].measurement(27) << endl;
+  }
+
+  // Compatibility 
+
+  for (int i = 0; i < data.size(); i++){
+    for (int j=i+1; j < data.size(); j++){
+      if (i == j){
+        continue;
+      }
+      double diff_ = abs(data[i].measurement(27) - data[j].measurement(27));
+      double sigma = sqrt(pow(data[i].error(27), 2) + pow(data[j].error(27), 2));
+      if (diff_ > 2 * sigma) {
+        cout << expname[i] << " and " << expname[j] << " are not compatible." << endl;
+      }
+      else {
+        cout << expname[i] << " and " << expname[j] << " are compatible." << endl;
+      }
+      }
+    }
 
   return 0;
 }
