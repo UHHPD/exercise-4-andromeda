@@ -8,6 +8,10 @@
 
 using namespace std;
 
+double bkg_func(double x) {
+  return 0.005 - 0.00001 * x + 0.08 * exp(-0.015 * x);
+}
+
 Data::Data(const std::string& filename) {
   ifstream file(filename);
 
@@ -57,4 +61,31 @@ int Data :: checkCompatibility ( const Data & in , int n ){
   }
   return incompatible_total;
 }
+
+Data Data::average(const Data& in) {
+  Data out;
+  for (int i = 0; i < m_data.size(); ++i) {
+    double weight1 = pow(m_errors[i], -2);
+    double weight2 = pow(in.error(i), -2);
+    double average = (weight1 * m_data[i] + weight2 * in.measurement(i)) /
+                     (weight1 + weight2);
+    double error = sqrt(1 / (weight1 + weight2));
+    out.m_data.push_back(average);
+    out.m_errors.push_back(error);
+  }
+  out.m_bins = m_bins;
+  out.assertSizes();
+  return out;
+}
+
+double Data::chi2() {
+  double chi2 = 0;
+  for (int i = 0; i < m_data.size(); ++i) {
+    double diff = m_data[i] - bkg_func(binCenter(i));
+    chi2 += pow(diff / m_errors[i], 2);
+  }
+  return chi2 / 52;
+}
+
+
 void Data::assertSizes() { assert(m_data.size() + 1 == m_bins.size()); }

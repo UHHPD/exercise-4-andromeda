@@ -102,6 +102,35 @@ int main() {
       }
       }
     }
+  
+  //ex 2
+
+  for (int i = 0; i < data.size(); ++i) {
+    for (int j =  i + 1; j < data.size(); ++j) {
+      if (i == j) {
+        continue;
+      }
+      if (data[i].checkCompatibility(data[j], 2) < 2) {
+        Data average = data[i].average(data[j]);
+        cout << "Average of " << expname[i] << " and " << expname[j] << " is compatible with both experiments." << endl;
+        cout << "average measurement of experiment ";
+        for (int k = 0; k < average.size(); ++k) {
+          cout << average.measurement(k);
+        }
+        cout << endl;
+      }
+      else {
+        cout << "Average of " << expname[i] << " and " << expname[j] << " is not compatible with both experiments." << endl;
+      }
+    }
+  }
+
+  Data total_avg = data[0];
+  for (int i = 1; i < data.size(); ++i) {
+    total_avg = total_avg.average(data[i]);
+  }
+
+  cout << "chi2 of total average " << total_avg.chi2() << endl;
 
   return 0;
 }
