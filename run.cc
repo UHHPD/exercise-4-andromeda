@@ -125,6 +125,10 @@ int main() {
     }
   }
 
+  for (Data d : data) {
+    cout << "chi2 of experiment " << d.name() << " " << d.chi2() << endl;
+  }
+
   Data total_avg = data[0];
   for (int i = 1; i < data.size(); ++i) {
     total_avg = total_avg.average(data[i]);

@@ -10,7 +10,8 @@ class Data {
   int checkCompatibility(const Data& in, int n);
   Data average(const Data& in);
   double chi2();
-  
+  std::string name() const { return expName; }
+
   unsigned int size() const { return m_data.size(); }
   double measurement(int i) const { return m_data[i]; }
   double binCenter(int i) const { return (double)(m_bins[i] + m_bins[i + 1]) / 2; }
@@ -24,6 +25,7 @@ class Data {
   std::vector<double> m_data;
   std::vector<double> m_bins;
   std::vector<double> m_errors;
+  std::string expName;
 };
 
 #endif
