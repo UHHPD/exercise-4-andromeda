@@ -110,6 +110,8 @@ int main() {
       if (i == j) {
         continue;
       }
+      std::cout << "exps: " << i << " and " << j << " 2-sigma diff: " <<  data[i].checkCompatibility(data[j], 2)
+                << " 3-sigma diff:" << data[i].checkCompatibility(data[j], 3) << std::endl; 
       if (data[i].checkCompatibility(data[j], 2) < 2) {
         Data average = data[i].average(data[j]);
         cout << "Average of " << expname[i] << " and " << expname[j] << " is compatible with both experiments." << endl;
